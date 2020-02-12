@@ -8,6 +8,17 @@ import { View, Platform,StyleSheet,Text, ScrollView, Image } from 'react-native'
 import { createStackNavigator,createDrawerNavigator ,DrawerItems } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 import SafeAreaView from 'react-native-safe-area-view';
+import { connect } from 'react-redux';
+import { fetchCampsites, fetchComments, fetchPromotions,
+    fetchPartners } from '../redux/ActionCreators';
+
+    
+const mapDispatchToProps = {
+    fetchCampsites,
+    fetchComments,
+    fetchPromotions,
+    fetchPartners
+};
 
 const DirectoryNavigator = createStackNavigator(
     {
@@ -17,7 +28,7 @@ const DirectoryNavigator = createStackNavigator(
                 headerLeft:<Icon 
                             name='list'
                             type='font-awesome'
-                            iconstyle={styles.stackIcon}
+                            iconStyle={styles.stackIcon}
                             onPress={() => navigation.toggleDrawer()}
                              />
                         })
@@ -80,7 +91,7 @@ const AboutNavigator = createStackNavigator(
                        name='info-circle'
                        type='font-awesome'
                        iconStyle={styles.stackIcon}
-                       onPress={()=> navigation.toggleDrawer()}
+                       onPress={() => navigation.toggleDrawer()}
                        />
         })
     }
@@ -186,6 +197,13 @@ const MainNavigator = createDrawerNavigator(
 
 class Main extends Component {
     
+    
+    componentDidMount() {
+        this.props.fetchCampsites();
+        this.props.fetchComments();
+        this.props.fetchPromotions();
+        this.props.fetchPartners();
+    }
     render() {
         return (
             <View style={{flex: 1, paddingTop: Platform.OS === 'ios' ? 0 : Expo.Constants.statusBarHeight }}>
@@ -228,4 +246,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Main;
+export default connect(null, mapDispatchToProps)(Main);
